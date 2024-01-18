@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"io"
 	"reflect"
-	"strconv"
 	"strings"
 )
 
@@ -100,20 +99,15 @@ func (e *Entity) Get(c Client, uri string, payload interface{}) error {
 	if err != nil {
 		return err
 	}
-	type checkStruct struct {
-		ID interface{} `json:"id"`
-	}
-	var check checkStruct
+	var check map[string]interface{}
 	if err := json.Unmarshal(data, &check); err != nil {
 		return err
 	}
-	switch v := check.ID.(type) {
-	case int:
-		// 处理 ID 是 int 类型的情况，转换为 string 后再存回结构体
-		check.ID = strconv.Itoa(v)
+	if id, ok := check["ID"].(float64); ok {
+		check["ID"] = fmt.Sprintf("%v", int(id))
 	}
-	if jsonData, err := json.Marshal(check); err == nil {
-		if err := json.Unmarshal(jsonData, &payload); err != nil {
+	if updatedJSON, err := json.Marshal(check); err == nil {
+		if err := json.Unmarshal(updatedJSON, &payload); err != nil {
 			return err
 		}
 	} else {
