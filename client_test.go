@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stmcginnis/gofish/common"
+	"github.com/zhuqinghua/gofish/common"
 )
 
 const (

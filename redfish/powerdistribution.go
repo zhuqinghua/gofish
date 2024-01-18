@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/stmcginnis/gofish/common"
+	"github.com/zhuqinghua/gofish/common"
 )
 
 // The type of equipment this resource represents.

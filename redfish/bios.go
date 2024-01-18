@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/stmcginnis/gofish/common"
+	"github.com/zhuqinghua/gofish/common"
 )
 
 // Bios is used to represent BIOS attributes.

@@ -5,7 +5,7 @@
 package swordfish
 
 import (
-	"github.com/stmcginnis/gofish/common"
+	"github.com/zhuqinghua/gofish/common"
 )
 
 // IOPerformanceLineOfService is used to define a service option related

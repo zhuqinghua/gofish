@@ -5,7 +5,7 @@
 package redfish
 
 import (
-	"github.com/stmcginnis/gofish/common"
+	"github.com/zhuqinghua/gofish/common"
 )
 
 // SoftwareInventory is This Resource contains a single software

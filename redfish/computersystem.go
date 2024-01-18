@@ -10,7 +10,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/stmcginnis/gofish/common"
+	"github.com/zhuqinghua/gofish/common"
 )
 
 // BootOrderTypes is the choice of boot order property to use when controller

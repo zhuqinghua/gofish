@@ -5,7 +5,7 @@
 package redfish
 
 import (
-	"github.com/stmcginnis/gofish/common"
+	"github.com/zhuqinghua/gofish/common"
 )
 
 // MessageRegistryFileLocation is a location

@@ -11,9 +11,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stmcginnis/gofish"
-	"github.com/stmcginnis/gofish/common"
-	"github.com/stmcginnis/gofish/redfish"
+	"github.com/zhuqinghua/gofish"
+	"github.com/zhuqinghua/gofish/common"
+	"github.com/zhuqinghua/gofish/redfish"
 )
 
 const serviceRootBody = `{

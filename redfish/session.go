@@ -7,7 +7,7 @@ package redfish
 import (
 	"net/url"
 
-	"github.com/stmcginnis/gofish/common"
+	"github.com/zhuqinghua/gofish/common"
 )
 
 // SessionTypes is the type of session.

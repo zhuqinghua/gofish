@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stmcginnis/gofish/redfish"
+	"github.com/zhuqinghua/gofish/redfish"
 )
 
 var hpeThermalBody = `{
