@@ -116,6 +116,20 @@ func (e *Entity) Get(c Client, uri string, payload interface{}) error {
 			if id, ok := check["Id"].(float64); ok {
 				check["Id"] = fmt.Sprintf("%v", int(id))
 			}
+			links, ok := check["Links"].(map[string]interface{})
+			if ok {
+				volumes, ok := links["Volumes"].(map[string]interface{})
+				if ok {
+					var sliceData []string
+					for _, value := range volumes {
+						if oid, ok := value.(string); ok {
+							sliceData = append(sliceData, oid)
+						}
+					}
+					delete(links, "Volumes")
+					links["Volumes"] = sliceData
+				}
+			}
 		}
 	}
 	if odataId, ok := check["@odata.id"].(string); ok {
