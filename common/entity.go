@@ -16,7 +16,7 @@ type Entity struct {
 	// ODataID is the location of the resource.
 	ODataID string `json:"@odata.id"`
 	// ID uniquely identifies the resource.
-	ID string `json:"Id"`
+	ID interface{} `json:"Id"`
 	// Name is the name of the resource or array element.
 	Name string `json:"Name"`
 	// Client is the REST client interface to the system.
