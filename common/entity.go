@@ -7,7 +7,9 @@ package common
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"reflect"
+	"regexp"
 	"strings"
 )
 
@@ -93,7 +95,16 @@ func (e *Entity) Get(c Client, uri string, payload interface{}) error {
 	}
 	defer resp.Body.Close()
 
-	err = json.NewDecoder(resp.Body).Decode(payload)
+	// zhuqh add 2024-01-18
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+	re := regexp.MustCompile(`:\s*([\d.]+)([,}\]])`)
+	result := re.ReplaceAllString(string(data), `: "$1"$2`)
+	err = json.Unmarshal([]byte(result), &payload)
+	// err = json.NewDecoder(resp.Body).Decode(payload)
+	// zhuqh add end
 	if err != nil {
 		return err
 	}
