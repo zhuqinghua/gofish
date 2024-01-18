@@ -142,6 +142,32 @@ func (e *Entity) Get(c Client, uri string, payload interface{}) error {
 			}
 		}
 	}
+	// 包一层切片结构
+	if odataId, ok := check["@odata.id"].(string); ok {
+		if odataId == "/redfish/v1/Managers/1" {
+			links, ok := check["Links"].(map[string]interface{})
+			if ok {
+				managerForChassis, ok := links["ManagerForChassis"].(map[string]interface{})
+				if ok {
+					sliceData := []map[string]interface{}{managerForChassis}
+					delete(links, "ManagerForChassis")
+					links["ManagerForChassis"] = sliceData
+				}
+				managerInChassis, ok := links["ManagerInChassis"].(map[string]interface{})
+				if ok {
+					sliceData := []map[string]interface{}{managerInChassis}
+					delete(links, "ManagerInChassis")
+					links["ManagerInChassis"] = sliceData
+				}
+				managerForServers, ok := links["ManagerForServers"].(map[string]interface{})
+				if ok {
+					sliceData := []map[string]interface{}{managerForServers}
+					delete(links, "ManagerForServers")
+					links["ManagerForServers"] = sliceData
+				}
+			}
+		}
+	}
 	if updatedJSON, err := json.Marshal(check); err == nil {
 		if err := json.Unmarshal(updatedJSON, &payload); err != nil {
 			return err
