@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"io"
 	"reflect"
-	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -100,9 +100,25 @@ func (e *Entity) Get(c Client, uri string, payload interface{}) error {
 	if err != nil {
 		return err
 	}
-	re := regexp.MustCompile(`:\s*([\d.]+)([,}\]])`)
-	result := re.ReplaceAllString(string(data), `: "$1"$2`)
-	err = json.Unmarshal([]byte(result), &payload)
+	type checkStruct struct {
+		ID interface{} `json:"id"`
+	}
+	var check checkStruct
+	if err := json.Unmarshal(data, &check); err != nil {
+		return err
+	}
+	switch v := check.ID.(type) {
+	case int:
+		// 处理 ID 是 int 类型的情况，转换为 string 后再存回结构体
+		check.ID = strconv.Itoa(v)
+	}
+	if jsonData, err := json.Marshal(check); err == nil {
+		if err := json.Unmarshal(jsonData, &payload); err != nil {
+			return err
+		}
+	} else {
+		return err
+	}
 	// err = json.NewDecoder(resp.Body).Decode(payload)
 	// zhuqh add end
 	if err != nil {
