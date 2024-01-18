@@ -6,9 +6,8 @@ package redfish
 
 import (
 	"encoding/json"
-	"reflect"
-
 	"github.com/zhuqinghua/gofish/common"
+	"reflect"
 )
 
 // BaseModuleType is the type of module.
@@ -462,14 +461,17 @@ func (memory *Memory) Chassis() (*Chassis, error) {
 // information to sockets and memory controllers.
 type MemoryLocation struct {
 	// Channel is Channel number in which Memory is connected.
-	Channel int
+	// Channel int zhuqh 2024-01-18
+	Channel string
 	// MemoryController is Memory controller number in which Memory is
 	// connected.
 	MemoryController int
 	// Slot is Slot number in which Memory is connected.
-	Slot int
+	// Slot int zhuqh 2024-01-18
+	Slot string
 	// Socket is Socket number in which Memory is connected.
-	Socket int
+	// Socket int zhuqh 2024-01-18
+	Socket string
 }
 
 // PowerManagementPolicy shall contain properties which describe the power

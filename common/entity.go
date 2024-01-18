@@ -103,8 +103,44 @@ func (e *Entity) Get(c Client, uri string, payload interface{}) error {
 	if err := json.Unmarshal(data, &check); err != nil {
 		return err
 	}
-	if id, ok := check["ID"].(float64); ok {
-		check["ID"] = fmt.Sprintf("%v", int(id))
+
+	if odataId, ok := check["@odata.id"].(string); ok {
+		if strings.Contains(odataId, "/redfish/v1/Systems/1/Processors/") {
+			if socket, ok := check["Socket"].(float64); ok {
+				check["Socket"] = fmt.Sprintf("%v", int(socket))
+			}
+		}
+	}
+	if odataId, ok := check["@odata.id"].(string); ok {
+		if strings.Contains(odataId, "/redfish/v1/Chassis/1/Drives/") {
+			if id, ok := check["Id"].(float64); ok {
+				check["Id"] = fmt.Sprintf("%v", int(id))
+			}
+		}
+	}
+	if odataId, ok := check["@odata.id"].(string); ok {
+		if strings.Contains(odataId, "/redfish/v1/Chassis/1/PCIeDevices/") {
+			if id, ok := check["Id"].(float64); ok {
+				check["Id"] = fmt.Sprintf("%v", int(id))
+			}
+		}
+	}
+	// 这个地方牺牲标准，适配suma服务器，因为suma的值是string无法转int
+	if odataId, ok := check["@odata.id"].(string); ok {
+		if strings.Contains(odataId, "/redfish/v1/Systems/1/Memory/") {
+			memLocation, ok := check["MemoryLocation"].(map[string]interface{})
+			if ok {
+				if socket, ok := memLocation["Socket"].(float64); ok {
+					memLocation["Socket"] = fmt.Sprintf("%v", int(socket))
+				}
+				if channel, ok := memLocation["Channel"].(float64); ok {
+					memLocation["Channel"] = fmt.Sprintf("%v", int(channel))
+				}
+				if slot, ok := memLocation["Slot"].(float64); ok {
+					memLocation["Slot"] = fmt.Sprintf("%v", int(slot))
+				}
+			}
+		}
 	}
 	if updatedJSON, err := json.Marshal(check); err == nil {
 		if err := json.Unmarshal(updatedJSON, &payload); err != nil {
