@@ -7,8 +7,6 @@ package common
 import (
 	"encoding/json"
 	"fmt"
-	"regexp"
-	"strings"
 	"sync"
 )
 
@@ -109,19 +107,6 @@ func CollectList(get func(string), c Client, link string) error {
 	if err != nil {
 		return err
 	}
-	// zhuqh add 2024-01-21
-	// 只要SEL日志，且只要最近5条，避免大量日志读取延迟
-	regexPattern := `^/redfish/v1/[a-zA-Z]+/\d+/LogServices/[a-zA-Z]+/Entries$`
-	regex, _ := regexp.Compile(regexPattern)
-	isMatch := regex.MatchString(link)
-	if isMatch {
-		if strings.Contains(link, "SEL") {
-			CollectCollection(get, collection.ItemLinks[:5])
-		} else {
-			return nil
-		}
-	}
-	// zhuqh add end
 
 	CollectCollection(get, collection.ItemLinks)
 	if collection.MembersNextLink != "" {
