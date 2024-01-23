@@ -160,12 +160,11 @@ func (e *Entity) Get(c Client, uri string, payload interface{}) error {
 		}
 		// CS5280H2服务器StorageControllers类型转化，这里很恶心，路径有单词拼写错误（Systems->Systens）
 		if strings.Contains(odataId, "/redfish/v1/Systens/1/Storages/") {
-			storageControllers, ok := check["StorageControllers"].([]interface{})
-			if ok {
+			if storageControllers, ok := check["StorageControllers"].([]interface{}); ok {
 				for _, sc := range storageControllers {
 					if storageController, ok := sc.(map[string]interface{}); ok {
-						if memberID, ok := storageController["MemberID"].(float64); ok {
-							storageController["MemberID"] = fmt.Sprintf("%v", int(memberID))
+						if memberID, ok := storageController["MemberId"].(float64); ok {
+							storageController["MemberId"] = fmt.Sprintf("%v", int(memberID))
 						}
 						if speedGbps, ok := storageController["SpeedGbps"].(string); ok {
 							result, err := strconv.ParseFloat(speedGbps, 32)
