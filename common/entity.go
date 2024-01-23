@@ -173,6 +173,11 @@ func (e *Entity) Get(c Client, uri string, payload interface{}) error {
 							}
 							storageController["SpeedGbps"] = float32(result)
 						}
+						if supportedDeviceProtocols, ok := storageController["SupportedDeviceProtocols"].(string); ok {
+							sliceData := []string{supportedDeviceProtocols}
+							delete(storageController, "SupportedDeviceProtocols")
+							storageController["SupportedDeviceProtocols"] = sliceData
+						}
 					}
 				}
 			}
