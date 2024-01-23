@@ -119,6 +119,13 @@ const (
 	AutomaticIntrusionSensorReArm IntrusionSensorReArm = "Automatic"
 )
 
+// Mainboard zhuqh add 2024-01-23
+type Mainboard struct {
+	BoardName    string
+	Manufacturer string
+	SerialNumber string
+}
+
 // PhysicalSecurity shall describe the sensor state of the physical
 // security.
 type PhysicalSecurity struct {
@@ -241,6 +248,8 @@ type Chassis struct {
 	resetTarget string
 	// SupportedResetTypes, if provided, is the reset types this chassis supports.
 	SupportedResetTypes []ResetType
+	// zhuqh add 2024-01-23
+	Mainboard Mainboard
 	// rawData holds the original serialized JSON so we can compare updates.
 	rawData []byte
 }
