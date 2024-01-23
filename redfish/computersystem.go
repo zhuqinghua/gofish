@@ -573,23 +573,23 @@ type ComputerSystem struct {
 	rawData []byte
 }
 
-// updateProcessorsLink zhuqh 2024-01-23
-func (computersystem *ComputerSystem) updateProcessorsLink(link string) {
+// UpdateProcessorsLink zhuqh 2024-01-23
+func (computersystem *ComputerSystem) UpdateProcessorsLink(link string) {
 	computersystem.processors = link
 }
 
-// updateMemoryLink zhuqh 2024-01-23
-func (computersystem *ComputerSystem) updateMemoryLink(link string) {
+// UpdateMemoryLink zhuqh 2024-01-23
+func (computersystem *ComputerSystem) UpdateMemoryLink(link string) {
 	computersystem.memory = link
 }
 
-// updateBiosLink zhuqh 2024-01-23
-func (computersystem *ComputerSystem) updateBiosLink(link string) {
+// UpdateBiosLink zhuqh 2024-01-23
+func (computersystem *ComputerSystem) UpdateBiosLink(link string) {
 	computersystem.bios = link
 }
 
-// updateStorageLink zhuqh 2024-01-23
-func (computersystem *ComputerSystem) updateStorageLink(link string) {
+// UpdateStorageLink zhuqh 2024-01-23
+func (computersystem *ComputerSystem) UpdateStorageLink(link string) {
 	computersystem.storage = link
 }
 
