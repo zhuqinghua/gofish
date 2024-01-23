@@ -158,8 +158,8 @@ func (e *Entity) Get(c Client, uri string, payload interface{}) error {
 				check["Controllers"] = sliceData
 			}
 		}
-		// CS5280H2服务器StorageControllers类型转化
-		if strings.Contains(odataId, "/redfish/v1/Systems/1/Storages/") {
+		// CS5280H2服务器StorageControllers类型转化，这里很恶心，路径有单词拼写错误（Systems->Systens）
+		if strings.Contains(odataId, "/redfish/v1/Systens/1/Storages/") {
 			if controllers, ok := check["StorageControllers"].([]map[string]interface{}); ok {
 				for _, controller := range controllers {
 					if memberID, ok := controller["MemberID"].(float64); ok {
