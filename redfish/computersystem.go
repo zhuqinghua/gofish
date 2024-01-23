@@ -573,6 +573,26 @@ type ComputerSystem struct {
 	rawData []byte
 }
 
+// updateProcessorsLink zhuqh 2024-01-23
+func (computersystem *ComputerSystem) updateProcessorsLink(link string) {
+	computersystem.processors = link
+}
+
+// updateMemoryLink zhuqh 2024-01-23
+func (computersystem *ComputerSystem) updateMemoryLink(link string) {
+	computersystem.memory = link
+}
+
+// updateBiosLink zhuqh 2024-01-23
+func (computersystem *ComputerSystem) updateBiosLink(link string) {
+	computersystem.bios = link
+}
+
+// updateStorageLink zhuqh 2024-01-23
+func (computersystem *ComputerSystem) updateStorageLink(link string) {
+	computersystem.storage = link
+}
+
 // UnmarshalJSON unmarshals a ComputerSystem object from the raw JSON.
 func (computersystem *ComputerSystem) UnmarshalJSON(b []byte) error {
 	type CSActions struct {

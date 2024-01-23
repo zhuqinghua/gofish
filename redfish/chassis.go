@@ -245,6 +245,26 @@ type Chassis struct {
 	rawData []byte
 }
 
+// updateThermalLink zhuqh add 2024-01-23
+func (chassis *Chassis) updateThermalLink(link string) {
+	chassis.thermal = link
+}
+
+// updatePowerLink zhuqh add 2024-01-23
+func (chassis *Chassis) updatePowerLink(link string) {
+	chassis.power = link
+}
+
+// updateNetworkAdaptersLink zhuqh add 2024-01-23
+func (chassis *Chassis) updateNetworkAdaptersLink(link string) {
+	chassis.networkAdapters = link
+}
+
+// updateDrivesLink zhuqh add 2024-01-23
+func (chassis *Chassis) updateDrivesLink(link string) {
+	chassis.drives = link
+}
+
 // UnmarshalJSON unmarshals a Chassis object from the raw JSON.
 func (chassis *Chassis) UnmarshalJSON(b []byte) error {
 	type temp Chassis
