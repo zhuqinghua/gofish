@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io"
 	"reflect"
+	"strconv"
 	"strings"
 )
 
@@ -110,8 +111,6 @@ func (e *Entity) Get(c Client, uri string, payload interface{}) error {
 				check["Socket"] = fmt.Sprintf("%v", int(socket))
 			}
 		}
-	}
-	if odataId, ok := check["@odata.id"].(string); ok {
 		if strings.Contains(odataId, "/redfish/v1/Chassis/1/Drives/") {
 			if id, ok := check["Id"].(float64); ok {
 				check["Id"] = fmt.Sprintf("%v", int(id))
@@ -131,16 +130,12 @@ func (e *Entity) Get(c Client, uri string, payload interface{}) error {
 				}
 			}
 		}
-	}
-	if odataId, ok := check["@odata.id"].(string); ok {
 		if strings.Contains(odataId, "/redfish/v1/Chassis/1/PCIeDevices/") {
 			if id, ok := check["Id"].(float64); ok {
 				check["Id"] = fmt.Sprintf("%v", int(id))
 			}
 		}
-	}
-	// 这个地方牺牲标准，适配suma服务器，因为suma的值是string无法转int
-	if odataId, ok := check["@odata.id"].(string); ok {
+		// 这个地方牺牲标准，适配suma服务器，因为suma的值是string无法转int
 		if strings.Contains(odataId, "/redfish/v1/Systems/1/Memory/") {
 			memLocation, ok := check["MemoryLocation"].(map[string]interface{})
 			if ok {
@@ -155,9 +150,32 @@ func (e *Entity) Get(c Client, uri string, payload interface{}) error {
 				}
 			}
 		}
-	}
-	// 包一层切片结构
-	if odataId, ok := check["@odata.id"].(string); ok {
+		// CS5280H2服务器controllers结构包一层切片
+		if strings.Contains(odataId, "/redfish/v1/Chassis/1/NetworkAdapters/") {
+			if controllers, ok := check["Controllers"].(map[string]interface{}); ok {
+				sliceData := []map[string]interface{}{controllers}
+				delete(check, "Controllers")
+				check["Controllers"] = sliceData
+			}
+		}
+		// CS5280H2服务器StorageControllers类型转化
+		if strings.Contains(odataId, "/redfish/v1/Systems/1/Storages/") {
+			if controllers, ok := check["StorageControllers"].([]map[string]interface{}); ok {
+				for _, controller := range controllers {
+					if memberID, ok := controller["MemberID"].(float64); ok {
+						controller["MemberID"] = fmt.Sprintf("%v", int(memberID))
+					}
+					if speedGbps, ok := controller["SpeedGbps"].(string); ok {
+						result, err := strconv.ParseFloat(speedGbps, 32)
+						if err != nil {
+							result = 0
+						}
+						controller["SpeedGbps"] = float32(result)
+					}
+				}
+			}
+		}
+		// 包一层切片
 		if odataId == "/redfish/v1/Managers/1" {
 			links, ok := check["Links"].(map[string]interface{})
 			if ok {
@@ -182,6 +200,7 @@ func (e *Entity) Get(c Client, uri string, payload interface{}) error {
 			}
 		}
 	}
+
 	if updatedJSON, err := json.Marshal(check); err == nil {
 		if err := json.Unmarshal(updatedJSON, &payload); err != nil {
 			return err
