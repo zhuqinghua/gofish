@@ -129,6 +129,12 @@ func (e *Entity) Get(c Client, uri string, payload interface{}) error {
 					links["Volumes"] = sliceData
 				}
 			}
+			// CS5280H服务器drive location包一层切片
+			if location, ok := check["Location"].(map[string]interface{}); ok {
+				sliceData := []map[string]interface{}{location}
+				delete(check, "Location")
+				check["Location"] = sliceData
+			}
 		}
 		if strings.Contains(odataId, "/redfish/v1/Chassis/1/PCIeDevices/") {
 			if id, ok := check["Id"].(float64); ok {
@@ -147,6 +153,36 @@ func (e *Entity) Get(c Client, uri string, payload interface{}) error {
 				}
 				if slot, ok := memLocation["Slot"].(float64); ok {
 					memLocation["Slot"] = fmt.Sprintf("%v", int(slot))
+				}
+			}
+		}
+		// CS5280H服务器的Power.PowerControl.[].PowerLimit.LimitInWatts是string，标准为float32
+		if odataId == "/redfish/v1/Chassis/1/Power" {
+			if powerControls, ok := check["PowerControl"].([]interface{}); ok {
+				for _, pc := range powerControls {
+					if powerControl, ok := pc.(map[string]interface{}); ok {
+						if powerLimit, ok := powerControl["PowerLimit"].(map[string]interface{}); ok {
+							if _, ok := powerLimit["LimitInWatts"].(string); ok {
+								float32Data := float32(-1)
+								delete(powerLimit, "LimitInWatts")
+								powerLimit["LimitInWatts"] = float32Data
+							}
+						}
+					}
+				}
+			}
+		}
+		// CS5280H服务器的Thermal.Temperatures.[].UpperThresholdNonCritical是string，标准为float32
+		if odataId == "/redfish/v1/Chassis/1/Thermal" {
+			if temperatures, ok := check["Temperatures"].([]interface{}); ok {
+				for _, tp := range temperatures {
+					if temperature, ok := tp.(map[string]interface{}); ok {
+						if _, ok := temperature["UpperThresholdNonCritical"].(string); ok {
+							float32Data := float32(-1)
+							delete(temperature, "UpperThresholdNonCritical")
+							temperature["UpperThresholdNonCritical"] = float32Data
+						}
+					}
 				}
 			}
 		}
