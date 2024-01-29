@@ -171,8 +171,49 @@ func (e *Entity) Get(c Client, uri string, payload interface{}) error {
 					}
 				}
 			}
+			if voltages, ok := check["Voltages"].([]interface{}); ok {
+				for _, vt := range voltages {
+					if voltage, ok := vt.(map[string]interface{}); ok {
+						if _, ok := voltage["ReadingVolts"].(string); ok {
+							float32Data := float32(-1)
+							delete(voltage, "ReadingVolts")
+							voltage["ReadingVolts"] = float32Data
+						}
+						if _, ok := voltage["UpperThresholdNonCritical"].(string); ok {
+							float32Data := float32(-1)
+							delete(voltage, "UpperThresholdNonCritical")
+							voltage["UpperThresholdNonCritical"] = float32Data
+						}
+						if _, ok := voltage["UpperThresholdCritical"].(string); ok {
+							float32Data := float32(-1)
+							delete(voltage, "UpperThresholdCritical")
+							voltage["UpperThresholdCritical"] = float32Data
+						}
+						if _, ok := voltage["LowerThresholdNonCritical"].(string); ok {
+							float32Data := float32(-1)
+							delete(voltage, "LowerThresholdNonCritical")
+							voltage["LowerThresholdNonCritical"] = float32Data
+						}
+						if _, ok := voltage["LowerThresholdCritical"].(string); ok {
+							float32Data := float32(-1)
+							delete(voltage, "LowerThresholdCritical")
+							voltage["LowerThresholdCritical"] = float32Data
+						}
+						if _, ok := voltage["LowerThresholdFatal"].(string); ok {
+							float32Data := float32(-1)
+							delete(voltage, "LowerThresholdFatal")
+							voltage["LowerThresholdFatal"] = float32Data
+						}
+						if _, ok := voltage["UpperThresholdFatal"].(string); ok {
+							float32Data := float32(-1)
+							delete(voltage, "UpperThresholdFatal")
+							voltage["UpperThresholdFatal"] = float32Data
+						}
+					}
+				}
+			}
 		}
-		// CS5280H服务器的Thermal.Temperatures.[].UpperThresholdNonCritical是string，标准为float32
+		// CS5280H服务器的Thermal.Temperatures.[].UpperThresholdNonCritical等NA状态是string，标准为float32
 		if odataId == "/redfish/v1/Chassis/1/Thermal" {
 			if temperatures, ok := check["Temperatures"].([]interface{}); ok {
 				for _, tp := range temperatures {
@@ -181,6 +222,21 @@ func (e *Entity) Get(c Client, uri string, payload interface{}) error {
 							float32Data := float32(-1)
 							delete(temperature, "UpperThresholdNonCritical")
 							temperature["UpperThresholdNonCritical"] = float32Data
+						}
+						if _, ok := temperature["UpperThresholdCritical"].(string); ok {
+							float32Data := float32(-1)
+							delete(temperature, "UpperThresholdCritical")
+							temperature["UpperThresholdCritical"] = float32Data
+						}
+						if _, ok := temperature["ReadingCelsius"].(string); ok {
+							float32Data := float32(-1)
+							delete(temperature, "ReadingCelsius")
+							temperature["ReadingCelsius"] = float32Data
+						}
+						if _, ok := temperature["UpperThresholdFatal"].(string); ok {
+							float32Data := float32(-1)
+							delete(temperature, "UpperThresholdFatal")
+							temperature["UpperThresholdFatal"] = float32Data
 						}
 					}
 				}
